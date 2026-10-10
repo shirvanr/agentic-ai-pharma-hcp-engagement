@@ -1,0 +1,30 @@
+# Install:
+#   sudo cp hcp-assistant.service /etc/systemd/system/hcp-assistant.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now hcp-assistant
+#   sudo systemctl status hcp-assistant
+#   journalctl -u hcp-assistant -f
+#
+# Adjust User= and WorkingDirectory= if you deployed somewhere else.
+
+[Unit]
+Description=HCP Engagement Assistant (Gradio demo)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/hcp-assistant
+EnvironmentFile=-/opt/hcp-assistant/.env
+ExecStart=/opt/hcp-assistant/venv/bin/python /opt/hcp-assistant/app.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+# light hardening - the app only needs to read its own directory
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

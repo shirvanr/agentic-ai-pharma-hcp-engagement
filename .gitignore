@@ -1,0 +1,7 @@
+.env
+data/demo.db
+venv/
+__pycache__/
+*.pyc
+nohup.out
+*.backup
